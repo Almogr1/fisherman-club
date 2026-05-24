@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fisherman Club ERP — מועדון הדייג גנאדי</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1a2744;--navy2:#0f1a33;--red:#e8412a;--red2:#bf2e1a;
+  --ok:#1e5c0f;--ok-bg:#e5f5dc;--ok-bd:#7ec860;
+  --low:#7a4800;--low-bg:#fff8e1;--low-bd:#f0c060;
+  --out:#8b1a1a;--out-bg:#fdeaea;--out-bd:#f09090;
+  --info:#0c447c;--info-bg:#e3f0fc;--info-bd:#85B7EB;
+  --bg:#f4f5f7;--bg2:#fff;
+  --border:0.5px solid #e0e0e0;
+  --shadow:0 2px 10px rgba(0,0,0,.07);
+  --shadow-lg:0 8px 28px rgba(0,0,0,.13);
+  --excl:#e8412a;--excl-bg:rgba(232,65,42,.055);--excl-bd:#f09090;
+  --r6:6px;--r8:8px;--r12:12px;
+  --text:#1a1a2e;--text2:#666;--text3:#999;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);overflow:hidden;height:100vh;color:var(--text)}
+.shell{display:flex;flex-direction:column;height:100vh}
+.tnav{height:48px;background:var(--bg2);border-bottom:var(--border);display:flex;align-items:center;padding:0;flex-shrink:0;z-index:30;box-shadow:var(--shadow)}
+.tn-logo{display:flex;align-items:center;gap:9px;padding:0 16px;border-left:var(--border);height:100%;cursor:pointer;min-width:190px}
+.tn-name{font-size:12px;font-weight:700;color:var(--text)}
+.tn-sub{font-size:9px;color:var(--text3)}
+.tn-tabs{display:flex;height:100%;overflow-x:auto}
+.nt{display:flex;align-items:center;gap:5px;padding:0 14px;font-size:11px;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;position:relative;transition:all .1s}
+.nt:hover{color:var(--text);background:#f9f9f9}
+.nt.on{color:var(--red);border-bottom-color:var(--red);font-weight:600}
+.nt .ti{font-size:13px}
+.nb{position:absolute;top:9px;right:9px;background:var(--red);color:#fff;font-size:8px;font-weight:700;min-width:14px;height:14px;border-radius:999px;display:flex;align-items:center;justify-content:center;padding:0 3px}
+.tn-right{margin-right:auto;display:flex;align-items:center;gap:5px;padding:0 12px}
+.srch-box{display:flex;align-items:center;gap:8px;background:#f4f5f7;border:var(--border);border-radius:var(--r8);padding:6px 11px;cursor:pointer;font-size:11px;color:var(--text2);min-width:190px;transition:border-color .1s}
+.srch-box:hover{border-color:#a0b8f0}
+.kbd{background:var(--bg2);border:var(--border);border-radius:3px;padding:1px 5px;font-size:9px;margin-right:auto}
+.ib{width:33px;height:33px;border-radius:var(--r8);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;background:transparent;color:var(--text2);font-size:15px;position:relative}
+.ib:hover{background:#f4f5f7;color:var(--text)}
+.ib-dot{position:absolute;top:5px;left:5px;width:7px;height:7px;border-radius:50%;background:var(--red)}
+.uavatar{width:27px;height:27px;border-radius:50%;background:var(--navy);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.bsplit{display:flex;flex:1;overflow:hidden}
+.main{flex:1;overflow-y:auto;padding:14px 16px;min-width:0;background:var(--bg)}
+.pg{display:none}.pg.on{display:block}
+.qabar{background:var(--bg2);border-top:var(--border);padding:9px 16px;display:flex;align-items:center;gap:7px;flex-shrink:0;box-shadow:0 -1px 4px rgba(0,0,0,.04)}
+.qa-lbl{font-size:10px;color:var(--text3);font-weight:500}
+.qab{display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:var(--r8);cursor:pointer;font-size:11px;font-weight:500;border:var(--border);background:var(--bg2);color:var(--text);transition:all .12s}
+.qab:hover{background:#f4f5f7;transform:translateY(-1px);box-shadow:var(--shadow)}
+.qab.pr{background:var(--red);color:#fff;border-color:var(--red)}.qab.pr:hover{background:var(--red2)}
+.qab.pg{background:var(--ok-bg);color:var(--ok);border-color:var(--ok-bd)}
+.qa-sep{width:1px;height:22px;background:#e0e0e0;margin:0 2px}
+.rates-bar{margin-right:auto;font-size:10px;color:var(--text3);display:flex;gap:10px}
+.rate-pill{display:flex;align-items:center;gap:4px}
+.rate-dot{width:6px;height:6px;border-radius:50%}
+.btn{padding:5px 11px;border-radius:var(--r6);font-size:11px;cursor:pointer;border:var(--border);background:var(--bg2);color:var(--text);display:inline-flex;align-items:center;gap:5px;white-space:nowrap;transition:all .1s}
+.btn:hover{background:#f4f5f7}
+.btn-r{background:var(--red);color:#fff;border-color:var(--red)}.btn-r:hover{background:var(--red2)}
+.btn-n{background:var(--navy);color:#fff;border-color:var(--navy)}.btn-n:hover{background:var(--navy2)}
+.btn-ok{background:var(--ok-bg);color:var(--ok);border-color:var(--ok-bd)}
+.sec{background:var(--bg2);border-radius:var(--r12);border:var(--border);margin-bottom:10px;overflow:hidden;box-shadow:var(--shadow)}
+.sh{padding:9px 13px;border-bottom:var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.st{font-size:12px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px}
+.kgrid{display:grid;gap:8px;margin-bottom:12px}
+.kgrid.c5{grid-template-columns:repeat(5,1fr)}
+.kgrid.c4{grid-template-columns:repeat(4,1fr)}
+.kcard{background:var(--bg2);border-radius:var(--r12);border:var(--border);padding:11px 13px;cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
+.kcard:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.kcard.u{border-color:var(--out-bd)}.kcard.w{border-color:var(--low-bd)}.kcard.g{border-color:var(--ok-bd)}
+.kc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:5px}
+.kc-icon{width:30px;height:30px;border-radius:var(--r8);display:flex;align-items:center;justify-content:center;font-size:15px}
+.kc-trend{font-size:9px;font-weight:600;padding:2px 6px;border-radius:999px}
+.kc-val{font-size:20px;font-weight:700;color:var(--text);line-height:1}
+.kc-lbl{font-size:10px;color:var(--text2);margin-top:2px}
+.kc-sub{font-size:10px;margin-top:1px}
+.bx{display:inline-flex;align-items:center;gap:2px;padding:2px 6px;border-radius:999px;font-size:10px;font-weight:600;white-space:nowrap}
+.bx-ok{background:var(--ok-bg);color:var(--ok)}
+.bx-low{background:var(--low-bg);color:var(--low)}
+.bx-out{background:var(--out-bg);color:var(--out)}
+.bx-info{background:var(--info-bg);color:var(--info)}
+.bx-excl{background:var(--excl-bg);color:var(--excl);border:0.5px solid var(--excl-bd)}
+.bx-gray{background:#f4f5f7;color:var(--text2)}
+.bx-navy{background:#e8f0fe;color:var(--navy)}
+.bx-gold{background:#faeeda;color:#c8860a}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th{padding:6px 10px;text-align:right;font-weight:600;font-size:10px;color:var(--text2);border-bottom:var(--border);background:#f9f9f9;white-space:nowrap;text-transform:uppercase;letter-spacing:.02em}
+td{padding:6px 10px;color:var(--text);border-bottom:var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(0,0,0,.018)}
+.re td{background:var(--excl-bg)}
+.re:hover td{background:rgba(232,65,42,.08)!important}
+.sc{display:inline-flex;align-items:center;gap:3px;background:#f4f5f7;border-radius:5px;padding:2px 3px}
+.scb{width:19px;height:19px;border-radius:4px;border:none;background:var(--bg2);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.07)}
+.scb:hover{background:var(--red);color:#fff}
+.scv{font-size:11px;font-weight:700;min-width:22px;text-align:center}
+.ra{display:flex;gap:3px;opacity:0;transition:opacity .12s}
+tr:hover .ra{opacity:1}
+.rab{width:24px;height:24px;border-radius:5px;border:var(--border);background:var(--bg2);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;color:var(--text2)}
+.rab:hover{background:var(--red);color:#fff;border-color:var(--red)}
+.isrch{display:flex;align-items:center;gap:7px;background:#f4f5f7;border:var(--border);border-radius:var(--r8);padding:6px 10px;margin-bottom:9px}
+.isrch input{flex:1;border:none;background:transparent;font-size:12px;outline:none;color:var(--text)}
+.fps{display:flex;gap:5px;margin-bottom:9px;flex-wrap:wrap}
+.fp{padding:3px 9px;border-radius:999px;font-size:10px;cursor:pointer;border:var(--border);background:var(--bg2);color:var(--text2)}
+.fp.on{background:var(--excl-bg);color:var(--red);border-color:var(--excl-bd)}
+.fg{display:flex;flex-direction:column;gap:2px}
+.fg label{font-size:10px;color:var(--text2);font-weight:600}
+.fg input,.fg select,.fg textarea{width:100%;font-size:12px;border:var(--border);border-radius:var(--r6);padding:6px 9px;background:var(--bg2);color:var(--text);outline:none}
+.fg input:focus,.fg select:focus{border-color:var(--red)}
+.fg textarea{resize:vertical;min-height:54px}
+.fgrid{display:grid;gap:8px;padding:13px}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:200;display:none;align-items:flex-start;justify-content:center;padding-top:70px}
+.ov.open{display:flex}
+.cp{background:var(--bg2);border-radius:var(--r12);border:var(--border);box-shadow:var(--shadow-lg);width:520px;overflow:hidden}
+.cp-inp{display:flex;align-items:center;gap:9px;padding:11px 14px;border-bottom:var(--border)}
+.cp-inp input{flex:1;font-size:14px;border:none;outline:none;background:transparent;color:var(--text)}
+.cp-esc{font-size:9px;background:#f4f5f7;border:var(--border);padding:1px 6px;border-radius:3px;color:var(--text2);cursor:pointer}
+.cp-sec{padding:7px 0}
+.cp-slbl{font-size:9px;font-weight:700;color:var(--text2);padding:3px 13px 5px;text-transform:uppercase;letter-spacing:.06em}
+.cp-item{display:flex;align-items:center;gap:9px;padding:6px 13px;cursor:pointer;font-size:12px;color:var(--text)}
+.cp-item:hover,.cp-item.hl{background:#f4f5f7}
+.cp-item .ti{font-size:15px;color:var(--text2);flex-shrink:0}
+.cp-item:hover .ti{color:var(--red)}
+.cp-sub{font-size:10px;color:var(--text2);margin-top:1px}
+.qam{background:var(--bg2);border-radius:var(--r12);border:var(--border);box-shadow:var(--shadow-lg);width:400px;overflow:hidden}
+.qam-hdr{padding:11px 14px;border-bottom:var(--border);display:flex;align-items:center;gap:8px}
+.qam-title{font-size:13px;font-weight:700;color:var(--text);flex:1}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.bar-lbl{font-size:10px;color:var(--text2);width:68px;text-align:right;flex-shrink:0}
+.bar-trk{flex:1;height:20px;background:#f4f5f7;border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 7px;transition:width .5s ease}
+.bar-val{font-size:10px;font-weight:600;color:#fff;white-space:nowrap}
+.ai-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;height:300px}
+.am{max-width:80%;padding:9px 12px;border-radius:10px;font-size:12px;line-height:1.55}
+.am-ai{background:#f4f5f7;align-self:flex-start;border-bottom-right-radius:3px}
+.am-u{background:var(--navy);color:#fff;align-self:flex-end;border-bottom-left-radius:3px}
+.ai-chips{padding:6px 12px;border-bottom:var(--border);display:flex;gap:5px;flex-wrap:wrap}
+.ai-chip{padding:3px 9px;border-radius:999px;font-size:10px;cursor:pointer;border:var(--border);background:var(--bg2);color:var(--text2)}
+.ai-chip:hover{background:var(--excl-bg);color:var(--red);border-color:var(--excl-bd)}
+.ai-irow{display:flex;gap:6px;padding:8px 12px;border-top:var(--border)}
+.ai-inp{flex:1;font-size:12px;border:var(--border);border-radius:var(--r8);padding:7px 10px;outline:none;background:var(--bg2);color:var(--text)}
+.ai-inp:focus{border-color:var(--red)}
+.ai-send{padding:7px 13px;border-radius:var(--r8);border:none;background:var(--red);color:#fff;cursor:pointer;font-size:13px}
+.ai-send:hover{background:var(--red2)}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--text2);display:inline-block;animation:bounce 1.2s infinite;margin:0 1px}
+.ai-dot:nth-child(2){animation-delay:.2s}.ai-dot:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+.toast-con{position:fixed;bottom:65px;left:50%;transform:translateX(-50%);z-index:500;pointer-events:none;display:flex;flex-direction:column;gap:5px;align-items:center}
+.toast{background:var(--navy);color:#fff;padding:8px 16px;border-radius:999px;font-size:12px;font-weight:500;box-shadow:var(--shadow-lg);animation:tin .18s ease;display:flex;align-items:center;gap:7px}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sp{display:inline-flex;align-items:flex-end;gap:1.5px;height:18px;vertical-align:middle}
+.spb{width:4px;border-radius:2px 2px 0 0;min-height:2px}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:99px}
+</style>
+</head>
+<body>
+<div class="shell">
+<div class="tnav">
+  <div class="tn-logo" onclick="go('dash',null)">
+    <svg width="28" height="17" viewBox="0 0 80 50"><ellipse cx="42" cy="25" rx="33" ry="15" fill="#1a2744"/><polygon points="9,25 20,14 20,36" fill="#1a2744"/><polygon points="75,11 80,25 75,39" fill="#1a2744"/><text x="42" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#e8412a" font-family="Arial">FISHERMAN</text><text x="42" y="32" text-anchor="middle" font-size="7" fill="#e0e8ff" font-family="Arial">CLUB</text></svg>
+    <div><div class="tn-name">Fisherman Club ERP</div><div class="tn-sub">מועדון הדייג גנאדי</div></div>
+  </div>
+  <div class="tn-tabs">
+    <div class="nt on" onclick="go('dash',this)"><i class="ti ti-dashboard"></i> ראשי</div>
+    <div class="nt" onclick="go('stock',this)"><i class="ti ti-package"></i> מלאי<div class="nb" id="nb-stock">6</div></div>
+    <div class="nt" onclick="go('invoices',this)"><i class="ti ti-file-invoice"></i> חשבוניות<div class="nb" id="nb-inv">3</div></div>
+    <div class="nt" onclick="go('customers',this)"><i class="ti ti-users"></i> לקוחות</div>
+    <div class="nt" onclick="go('po',this)"><i class="ti ti-clipboard-list"></i> רכש</div>
+    <div class="nt" onclick="go('finance',this)"><i class="ti ti-chart-bar"></i> כספים</div>
+    <div class="nt" onclick="go('wholesale',this)"><i class="ti ti-building-store"></i> סיטונאים</div>
+    <div class="nt" onclick="go('ai',this)"><i class="ti ti-robot"></i> AI<div class="nb" style="background:#3b82f6">✦</div></div>
+  </div>
+  <div class="tn-right">
+    <div class="srch-box" onclick="openCmd()"><i class="ti ti-search" style="font-size:13px"></i><span>חפש הכל...</span><span class="kbd">⌘K</span></div>
+    <button class="ib" onclick="toast('🔔 6 התראות פעילות','var(--low)')"><i class="ti ti-bell"></i><div class="ib-dot"></div></button>
+    <button class="ib" onclick="showRates()"><i class="ti ti-currency-dollar"></i></button>
+    <div class="uavatar" title="גנאדי — Admin">ג</div>
+  </div>
+</div>
+<div class="bsplit">
+<div class="main" id="mainArea">
+
+<div class="pg on" id="pg-dash">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <div><div style="font-size:17px;font-weight:700">שלום גנאדי 👋</div><div style="font-size:11px;color:var(--text2);margin-top:2px" id="dashDate"></div></div>
+    <div style="display:flex;gap:6px">
+      <button class="btn btn-ok" onclick="openQA('receive')"><i class="ti ti-plus"></i> קלוט פריט</button>
+      <button class="btn btn-r" onclick="openQA('sell')"><i class="ti ti-minus"></i> מכירה מהירה</button>
+      <button class="btn btn-n" onclick="openQA('invoice')"><i class="ti ti-file-invoice"></i> חשבונית</button>
+    </div>
+  </div>
+  <div class="kgrid c5">
+    <div class="kcard g" onclick="go('finance',null)"><div class="kc-top"><div class="kc-icon" style="background:var(--ok-bg)"><i class="ti ti-trending-up" style="color:var(--ok)"></i></div><div class="kc-trend" style="background:var(--ok-bg);color:var(--ok)">↑12%</div></div><div class="kc-val">₪84K</div><div class="kc-lbl">הכנסות מאי</div><div class="kc-sub"><span class="sp" id="sp-rev"></span></div></div>
+    <div class="kcard g" onclick="go('finance',null)"><div class="kc-top"><div class="kc-icon" style="background:#e8f0fe"><i class="ti ti-chart-pie" style="color:var(--navy)"></i></div><div class="kc-trend" style="background:var(--ok-bg);color:var(--ok)">61.9%</div></div><div class="kc-val">₪52K</div><div class="kc-lbl">רווח גולמי</div></div>
+    <div class="kcard w" onclick="go('invoices',null)"><div class="kc-top"><div class="kc-icon" style="background:var(--low-bg)"><i class="ti ti-clock" style="color:var(--low)"></i></div><div class="kc-trend" style="background:var(--low-bg);color:var(--low)">3 פתוחות</div></div><div class="kc-val" style="color:var(--low)">₪28K</div><div class="kc-lbl">לגבייה</div><div class="kc-sub" style="color:var(--out)">1 דחוף 8 ימים</div></div>
+    <div class="kcard u" onclick="go('stock',null)"><div class="kc-top"><div class="kc-icon" style="background:var(--out-bg)"><i class="ti ti-alert-triangle" style="color:var(--out)"></i></div><div class="kc-trend" style="background:var(--out-bg);color:var(--out)">★ בלעדיים</div></div><div class="kc-val" style="color:var(--red)">6</div><div class="kc-lbl">מלאי נמוך/אזל</div><div class="kc-sub" style="color:var(--out)">3 אזלו · 3 נמוכים</div></div>
+    <div class="kcard" onclick="showRates()"><div class="kc-top"><div class="kc-icon" style="background:#faeeda"><i class="ti ti-currency-yen" style="color:#c8860a"></i></div><div class="kc-trend" style="background:#faeeda;color:#c8860a">חי</div></div><div class="kc-val" style="font-size:15px" id="jpy-kpi">₪0.0247</div><div class="kc-lbl">JPY עדכני</div><div class="kc-sub" id="jpy-ts">טוען...</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+    <div class="sec">
+      <div class="sh"><span class="st"><i class="ti ti-award" style="color:var(--red)"></i> ★ בלעדיים — דחוף</span><button class="btn btn-r" style="font-size:10px;padding:4px 10px" onclick="openQA('po')"><i class="ti ti-send"></i> הזמן הכל</button></div>
+      <div class="tw"><table><thead><tr><th>מוצר</th><th>חנות</th><th>מחסן</th><th>סטטוס</th></tr></thead><tbody id="urgent-tbl"></tbody></table></div>
+    </div>
+    <div class="sec">
+      <div class="sh"><span class="st"><i class="ti ti-chart-bar" style="color:var(--info)"></i> מכירות חודשיות 2026</span></div>
+      <div style="padding:10px 13px" id="sales-chart"></div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+    <div class="sec"><div class="sh"><span class="st">💰 תשלומים קרובים</span></div><div style="padding:10px 13px;display:flex;flex-direction:column;gap:5px" id="payments-list"></div></div>
+    <div class="sec"><div class="sh"><span class="st">👥 TOP לקוחות</span></div><div class="tw"><table><thead><tr><th>חנות</th><th>רמה</th><th>מאי</th></tr></thead><tbody>
+      <tr class="re"><td>חנות הדייג ת"א</td><td><span class="bx bx-excl" style="font-size:9px">VIP</span></td><td style="font-weight:600;color:var(--ok)">₪22.4K</td></tr>
+      <tr><td>ציוד ים חיפה</td><td><span class="bx bx-navy" style="font-size:9px">פרמיום</span></td><td style="font-weight:600">₪14.2K</td></tr>
+      <tr><td>ספורט ים אשדוד</td><td><span class="bx bx-gray" style="font-size:9px">סטנדרט</span></td><td style="font-weight:600">₪8.6K</td></tr>
+    </tbody></table></div></div>
+    <div class="sec"><div class="sh"><span class="st">✅ משימות</span></div><div style="padding:10px 13px" id="task-list"></div></div>
+  </div>
+</div>
+
+<div class="pg" id="pg-stock">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px">
+    <div style="font-size:16px;font-weight:700">מלאי פריטים</div>
+    <div style="display:flex;gap:6px">
+      <button class="btn btn-ok" onclick="openQA('receive')"><i class="ti ti-plus"></i> קלוט</button>
+      <button class="btn btn-r" onclick="openQA('sell')"><i class="ti ti-minus"></i> מכר</button>
+      <button class="btn btn-n" onclick="openQA('transfer')"><i class="ti ti-arrows-exchange"></i> העבר</button>
+    </div>
+  </div>
+  <div class="isrch"><i class="ti ti-search" style="font-size:14px;color:var(--text2)"></i><input id="sInp" placeholder="שם, מותג, ברקוד..." oninput="renderStock()"/></div>
+  <div class="fps">
+    <button class="fp on" onclick="sf(this,'all')">הכל</button>
+    <button class="fp" onclick="sf(this,'excl')">★ בלעדיים</button>
+    <button class="fp" onclick="sf(this,'urgent')">⚠️ אזל/נמוך</button>
+    <button class="fp" onclick="sf(this,'store')">חנות</button>
+    <button class="fp" onclick="sf(this,'wh')">מחסן</button>
+  </div>
+  <div class="sec"><div class="tw"><table><thead><tr><th>מוצר</th><th>מותג</th><th>קטגוריה</th><th style="text-align:center">חנות</th><th style="text-align:center">מחסן</th><th>מחיר צרכן</th><th>מחיר חנות</th><th>סטטוס</th><th></th></tr></thead><tbody id="stockBody"></tbody></table></div></div>
+</div>
+
+<div class="pg" id="pg-invoices">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px">
+    <div style="font-size:16px;font-weight:700">חשבוניות מכר</div>
+    <button class="btn btn-r" onclick="openQA('invoice')"><i class="ti ti-plus"></i> חדשה</button>
+  </div>
+  <div class="kgrid c4" style="margin-bottom:11px">
+    <div class="kcard w"><div class="kc-top"><div class="kc-icon" style="background:var(--low-bg)"><i class="ti ti-clock" style="color:var(--low)"></i></div></div><div class="kc-val" style="color:var(--low)">3</div><div class="kc-lbl">ממתינות</div><div class="kc-sub">₪28,384</div></div>
+    <div class="kcard g"><div class="kc-top"><div class="kc-icon" style="background:var(--ok-bg)"><i class="ti ti-check" style="color:var(--ok)"></i></div></div><div class="kc-val" style="color:var(--ok)">4</div><div class="kc-lbl">שולמו</div><div class="kc-sub">₪21,446</div></div>
+    <div class="kcard"><div class="kc-top"><div class="kc-icon" style="background:#e8f0fe"><i class="ti ti-chart-bar" style="color:var(--navy)"></i></div></div><div class="kc-val">₪84K</div><div class="kc-lbl">סה"כ מאי</div></div>
+    <div class="kcard"><div class="kc-top"><div class="kc-icon" style="background:#faeeda"><i class="ti ti-file-export" style="color:#c8860a"></i></div></div><div class="kc-val">7</div><div class="kc-lbl">חשבוניות חודש</div></div>
+  </div>
+  <div class="sec"><div class="tw"><table><thead><tr><th>מס'</th><th>לקוח</th><th>תאריך</th><th>לפני מע"מ</th><th>מע"מ 18%</th><th>סה"כ</th><th>אמצעי</th><th>סטטוס</th><th></th></tr></thead><tbody>
+    <tr style="background:var(--out-bg)"><td><strong>INV-007</strong></td><td>חנות הדייג ת"א <span class="bx bx-excl" style="font-size:9px">VIP</span></td><td>22.05</td><td>₪4,580</td><td>₪824</td><td style="font-weight:700">₪5,404</td><td><span class="bx bx-info">העברה</span></td><td><span class="bx bx-low">8 ימים ⚠️</span></td><td><div class="ra"><button class="rab" onclick="toast('📧 תזכורת נשלחה','var(--ok)')"><i class="ti ti-mail"></i></button><button class="rab" onclick="toast('📄 PDF מוכן','var(--info)')"><i class="ti ti-file-export"></i></button><button class="rab" onclick="toast('✅ שולם!','var(--ok)')"><i class="ti ti-check"></i></button></div></td></tr>
+    <tr><td><strong>INV-006</strong></td><td>ציוד ים חיפה</td><td>18.05</td><td>₪8,200</td><td>₪1,476</td><td style="font-weight:700">₪9,676</td><td><span class="bx bx-info">העברה</span></td><td><span class="bx bx-low">ממתין</span></td><td><div class="ra"><button class="rab"><i class="ti ti-mail"></i></button><button class="rab"><i class="ti ti-file-export"></i></button><button class="rab"><i class="ti ti-check"></i></button></div></td></tr>
+    <tr><td><strong>INV-005</strong></td><td>דייגי הצפון</td><td>15.05</td><td>₪2,800</td><td>₪504</td><td style="font-weight:700">₪3,304</td><td><span class="bx bx-gold">צ'ק</span></td><td><span class="bx bx-low">ממתין</span></td><td><div class="ra"><button class="rab"><i class="ti ti-mail"></i></button><button class="rab"><i class="ti ti-file-export"></i></button><button class="rab"><i class="ti ti-check"></i></button></div></td></tr>
+    <tr><td><strong>INV-004</strong></td><td>חנות הדייג ת"א</td><td>08.05</td><td>₪6,100</td><td>₪1,098</td><td style="font-weight:700">₪7,198</td><td><span class="bx bx-ok">שולם</span></td><td><span class="bx bx-ok">שולם ✓</span></td><td><div class="ra"><button class="rab"><i class="ti ti-file-export"></i></button></div></td></tr>
+  </tbody></table></div></div>
+</div>
+
+<div class="pg" id="pg-customers">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px">
+    <div style="font-size:16px;font-weight:700">לקוחות וחנויות</div>
+    <button class="btn btn-r" onclick="openQA('newcust')"><i class="ti ti-plus"></i> לקוח חדש</button>
+  </div>
+  <div class="isrch"><i class="ti ti-search" style="font-size:14px;color:var(--text2)"></i><input placeholder="חפש חנות, עיר..."/></div>
+  <div class="sec"><div class="tw"><table><thead><tr><th>חנות</th><th>עיר</th><th>טלפון</th><th>רמה</th><th>יתרת חוב</th><th>מכירות שנה</th><th>הזמנה אחרונה</th><th></th></tr></thead><tbody>
+    <tr class="re"><td><strong>חנות הדייג תל אביב</strong></td><td>תל אביב</td><td>052-1234567</td><td><span class="bx bx-excl">★ VIP −10%</span></td><td style="color:var(--ok);font-weight:700">₪0</td><td style="font-weight:700">₪68K</td><td>22.05.26</td><td><div class="ra"><button class="rab" onclick="openQA('invoice')"><i class="ti ti-file-invoice"></i></button><button class="rab"><i class="ti ti-history"></i></button></div></td></tr>
+    <tr><td><strong>ציוד ים חיפה</strong></td><td>חיפה</td><td>054-9876543</td><td><span class="bx bx-navy">פרמיום −5%</span></td><td style="color:var(--low);font-weight:700">₪9,676</td><td style="font-weight:700">₪41K</td><td>18.05.26</td><td><div class="ra"><button class="rab" onclick="toast('📧 תזכורת לציוד ים חיפה','var(--ok)')"><i class="ti ti-mail"></i></button><button class="rab"><i class="ti ti-file-invoice"></i></button></div></td></tr>
+    <tr><td><strong>דייגי הצפון</strong></td><td>עכו</td><td>050-5556677</td><td><span class="bx bx-gray">סטנדרט</span></td><td style="color:var(--red);font-weight:700">₪3,304 ⚠️</td><td style="font-weight:700">₪14K</td><td>15.05.26</td><td><div class="ra"><button class="rab"><i class="ti ti-mail"></i></button><button class="rab"><i class="ti ti-file-invoice"></i></button></div></td></tr>
+    <tr><td><strong>ספורט ים אשדוד</strong></td><td>אשדוד</td><td>053-3334455</td><td><span class="bx bx-gray">סטנדרט</span></td><td style="color:var(--ok)">₪0</td><td style="font-weight:700">₪28K</td><td>01.05.26</td><td><div class="ra"><button class="rab" onclick="toast('⭐ שודרג לפרמיום!','var(--ok)')"><i class="ti ti-star"></i></button></div></td></tr>
+  </tbody></table></div></div>
+</div>
+
+<div class="pg" id="pg-po">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px">
+    <div style="font-size:16px;font-weight:700">הזמנות רכש (PO)</div>
+    <button class="btn btn-r" onclick="openQA('po')"><i class="ti ti-plus"></i> PO חדשה</button>
+  </div>
+  <div class="sec"><div class="tw"><table><thead><tr><th>מס' PO</th><th>ספק</th><th>מדינה</th><th>ערך מקורי</th><th>שע"ח</th><th>ערך ₪</th><th>ETA</th><th>סטטוס</th></tr></thead><tbody>
+    <tr class="re"><td><strong>PO-2026-019</strong></td><td>mc works Co.</td><td>🇯🇵</td><td>¥620,000</td><td>₪0.0247</td><td style="font-weight:700">₪15,314</td><td>15.06.26</td><td><span class="bx bx-info">בדרך</span></td></tr>
+    <tr class="re"><td><strong>PO-2026-018</strong></td><td>TANA Co.</td><td>🇯🇵</td><td>¥380,000</td><td>₪0.0247</td><td style="font-weight:700">₪9,386</td><td>01.07.26</td><td><span class="bx bx-low">ממתין שילוח</span></td></tr>
+    <tr><td><strong>PO-2026-017</strong></td><td>andy Co.</td><td>🇨🇳</td><td>$4,200</td><td>₪3.70</td><td style="font-weight:700">₪15,540</td><td>10.06.26</td><td><span class="bx bx-info">בדרך</span></td></tr>
+    <tr><td><strong>PO-2026-016</strong></td><td>fox International</td><td>🇬🇧</td><td>£850</td><td>₪4.72</td><td style="font-weight:700">₪4,012</td><td>—</td><td><span class="bx bx-ok">הגיע ✓</span></td></tr>
+  </tbody></table></div></div>
+</div>
+
+<div class="pg" id="pg-finance">
+  <div style="font-size:16px;font-weight:700;margin-bottom:11px">כספים ו-P&L</div>
+  <div class="kgrid c4" style="margin-bottom:11px">
+    <div class="kcard g"><div class="kc-top"><div class="kc-icon" style="background:var(--ok-bg)"><i class="ti ti-trending-up" style="color:var(--ok)"></i></div><div class="kc-trend" style="background:var(--ok-bg);color:var(--ok)">↑12%</div></div><div class="kc-val">₪84K</div><div class="kc-lbl">הכנסות מאי</div></div>
+    <div class="kcard g"><div class="kc-top"><div class="kc-icon" style="background:var(--ok-bg)"><i class="ti ti-chart-pie" style="color:var(--ok)"></i></div><div class="kc-trend" style="background:var(--ok-bg);color:var(--ok)">61.9%</div></div><div class="kc-val" style="color:var(--ok)">₪52K</div><div class="kc-lbl">רווח גולמי</div></div>
+    <div class="kcard g"><div class="kc-top"><div class="kc-icon" style="background:var(--ok-bg)"><i class="ti ti-check" style="color:var(--ok)"></i></div></div><div class="kc-val" style="color:var(--ok)">₪38K</div><div class="kc-lbl">רווח נקי</div><div class="kc-sub" style="color:var(--ok)">45.9%</div></div>
+    <div class="kcard"><div class="kc-top"><div class="kc-icon" style="background:#e8f0fe"><i class="ti ti-building-bank" style="color:var(--info)"></i></div></div><div class="kc-val" style="color:var(--info)">₪143K</div><div class="kc-lbl">יתרת בנק</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div class="sec"><div class="sh"><span class="st">רווח והפסד — מאי 2026</span><button class="btn btn-r" style="font-size:10px;padding:3px 9px" onclick="toast('📄 P&L PDF מוכן','var(--info)')"><i class="ti ti-file-export"></i> PDF</button></div><div style="padding:12px 14px;font-size:11px" id="pnl-table"></div></div>
+    <div class="sec"><div class="sh"><span class="st">תחזית תזרים — יוני</span></div><div style="padding:12px 14px"><div style="display:flex;flex-direction:column;gap:5px" id="cf-list"></div></div></div>
+  </div>
+</div>
+
+<div class="pg" id="pg-wholesale">
+  <div style="font-size:16px;font-weight:700;margin-bottom:11px">פורטל סיטונאים</div>
+  <div style="background:var(--excl-bg);border:0.5px solid var(--excl-bd);border-radius:var(--r8);padding:8px 12px;font-size:11px;color:var(--red);margin-bottom:10px;font-weight:500">★ מותגים בלעדיים: מחיר חנות = מחיר צרכן ÷ 1.6 · שאר הציוד: ÷ 2</div>
+  <div class="fps"><button class="fp on" onclick="wf(this,'all')">הכל</button><button class="fp" onclick="wf(this,'lux')">★ יוקרה ÷1.6</button><button class="fp" onclick="wf(this,'std')">סטנדרט ÷2</button></div>
+  <div class="sec"><div class="tw"><table id="wsTbl"><thead><tr><th>מוצר</th><th>מותג</th><th>נוסחה</th><th>מחיר צרכן</th><th>מחיר חנות</th><th>VIP −10%</th><th>מלאי</th><th>הוסף</th></tr></thead><tbody id="wsBody"></tbody></table></div></div>
+  <div style="display:flex;gap:8px;margin-top:8px">
+    <button class="btn btn-r" style="flex:1;justify-content:center" onclick="toast('📋 הזמנה סיטונאית נשלחה לאישור','var(--ok)')"><i class="ti ti-send"></i> שלח הזמנה</button>
+    <button class="btn" onclick="toast('📄 מחירון PDF מוכן','var(--info)')"><i class="ti ti-file-export"></i> ייצא מחירון</button>
+  </div>
+</div>
+
+<div class="pg" id="pg-ai" style="display:none;flex-direction:column;height:calc(100vh - 130px)">
+  <div style="font-size:16px;font-weight:700;margin-bottom:10px;flex-shrink:0">🤖 עוזר AI — Fisherman Club</div>
+  <div class="sec" style="flex:1;overflow:hidden;display:flex;flex-direction:column;margin-bottom:0">
+    <div class="ai-chips">
+      <div class="ai-chip" onclick="askAI('מה המלאי הנמוך ביותר בבלעדיים?')">מלאי נמוך ★</div>
+      <div class="ai-chip" onclick="askAI('מה הרווח הגולמי של החודש?')">רווח גולמי</div>
+      <div class="ai-chip" onclick="askAI('אילו חשבוניות ממתינות לתשלום?')">גבייה פתוחה</div>
+      <div class="ai-chip" onclick="askAI('מתי כדאי להזמין מ-mc works?')">תחזית הזמנה</div>
+      <div class="ai-chip" onclick="askAI('נתח לי רווחיות לפי מותג')">רווחיות מותגים</div>
+    </div>
+    <div class="ai-msgs" id="aiMsgs" style="height:auto">
+      <div class="am am-ai">שלום גנאדי 👋 אני העוזר החכם של Fisherman Club.<br>שאל אותי כל שאלה עסקית — מלאי, כספים, ספקים, בלעדיות, שע"ח ועוד.</div>
+    </div>
+    <div class="ai-irow">
+      <input class="ai-inp" id="aiInp" placeholder="שאל שאלה עסקית..." onkeydown="if(event.key==='Enter')doAsk()"/>
+      <button class="ai-send" onclick="doAsk()"><i class="ti ti-send" style="font-size:13px"></i></button>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<div class="qabar">
+  <span class="qa-lbl">פעולות מהירות:</span>
+  <button class="qab pr" onclick="openQA('sell')"><i class="ti ti-minus"></i> מכירה</button>
+  <button class="qab pg" onclick="openQA('receive')"><i class="ti ti-plus"></i> קליטה</button>
+  <div class="qa-sep"></div>
+  <button class="qab" onclick="openQA('invoice')"><i class="ti ti-file-invoice"></i> חשבונית</button>
+  <button class="qab" onclick="openQA('po')"><i class="ti ti-clipboard-list"></i> הזמן מספק</button>
+  <button class="qab" onclick="openQA('transfer')"><i class="ti ti-arrows-exchange"></i> העבר מחסן↔חנות</button>
+  <div class="qa-sep"></div>
+  <button class="qab" onclick="openCmd()"><i class="ti ti-search"></i> ⌘K</button>
+  <div class="rates-bar">
+    <div class="rate-pill"><div class="rate-dot" style="background:var(--info)"></div><span id="rb-usd">USD ₪3.70</span></div>
+    <div class="rate-pill"><div class="rate-dot" style="background:#c8860a"></div><span id="rb-jpy">JPY ₪0.0247</span></div>
+    <div class="rate-pill"><div class="rate-dot" style="background:var(--ok)"></div><span id="rb-gbp">GBP ₪4.72</span></div>
+    <span id="rates-ts" style="font-size:10px;color:var(--text3)">טוען...</span>
+  </div>
+</div>
+
+</div>
+
+<div class="ov" id="cmdOv" onclick="closeCmd(event)">
+  <div class="cp">
+    <div class="cp-inp"><i class="ti ti-search" style="font-size:16px;color:var(--text2)"></i><input id="cmdInp" placeholder="חפש פריט, לקוח, פעולה..." oninput="cmdSearch(this.value)" onkeydown="cmdKey(event)"/><span class="cp-esc" onclick="closeCmd()">ESC</span></div>
+    <div id="cmdRes" style="max-height:340px;overflow-y:auto"></div>
+  </div>
+</div>
+<div class="ov" id="qaOv" onclick="closeQA(event)">
+  <div class="qam" id="qaModal"></div>
+</div>
+<div class="toast-con" id="toastCon"></div>
+
+<script>
+const RATES={usd:3.70,jpy:0.0247,gbp:4.72};
+const VAT=0.18;
+const fmt=n=>'₪'+Math.round(n).toLocaleString('he-IL');
+function wsPrice(retail,lux,tier=0){return Math.round((lux?retail/1.6:retail/2)*(1-tier));}
+
+const STOCK=[
+  {id:1,name:'MC WORKS WB100SV SP',brand:'MC WORKS',excl:true,cat:"ג'ירג'ור",retail:3182,store:4,wh:1,bc:'FC-001-WB'},
+  {id:2,name:'MC WORKS EXP 817 HF SP',brand:'MC WORKS',excl:true,cat:'פופינג',retail:3129,store:0,wh:0,bc:'FC-002-EX'},
+  {id:3,name:'MC WORKS SH806PD Std',brand:'MC WORKS',excl:true,cat:'פופינג',retail:3084,store:2,wh:0,bc:'FC-001-SH'},
+  {id:4,name:'CB ONE Enfinity EN80/16',brand:'CB ONE',excl:true,cat:"ג'ירג'ור",retail:2610,store:3,wh:2,bc:'FC-010'},
+  {id:5,name:'CB ONE SSR 553RB',brand:'CB ONE',excl:true,cat:"ג'ירג'ור",retail:1665,store:0,wh:0,bc:'FC-011'},
+  {id:6,name:'Truth Japan BlackDim 95H',brand:'TRUTH JAPAN',excl:true,cat:'פופינג',retail:4350,store:1,wh:0,bc:'FC-020'},
+  {id:7,name:'Squid Mania Wild Chase 3.5',brand:'SQUID MANIA',excl:true,cat:'קלאמרי',retail:60,store:15,wh:30,bc:'FC-030'},
+  {id:8,name:'Studio Ocean Mark BH50HI',brand:'SOM',excl:true,cat:'רולרים',retail:5000,store:1,wh:2,bc:'FC-040'},
+  {id:9,name:'andy Telescopic Carp 3.9M',brand:'andy',excl:false,cat:'קרפ',retail:170,store:20,wh:80,bc:'FC-100'},
+  {id:10,name:'andy Casting Rod 2.7M',brand:'andy',excl:false,cat:'קאסטינג',retail:175,store:15,wh:85,bc:'FC-101'},
+  {id:11,name:'andy Whip Rod 3M',brand:'andy',excl:false,cat:'ויפ',retail:23,store:50,wh:150,bc:'FC-102'},
+  {id:12,name:'Miya Epoch AC-3JPC',brand:'MIYA EPOCH',excl:true,cat:'רולרים',retail:6300,store:1,wh:1,bc:'FC-050'},
+];
+
+const THRESHOLDS={luxury:3,standard:10,lures:20,reels:2};
+function isUrgent(s){
+  const t=s.cat==='קרפ'||s.cat==='ויפ'||s.cat==='קאסטינג'?THRESHOLDS.standard:s.cat==='קלאמרי'?THRESHOLDS.lures:s.cat==='רולרים'?THRESHOLDS.reels:THRESHOLDS.luxury;
+  return(s.store+s.wh)<t;
+}
+function statBadge(s){const t=s.store+s.wh;return t===0?'<span class="bx bx-out">אזל</span>':isUrgent(s)?'<span class="bx bx-low">נמוך</span>':'<span class="bx bx-ok">תקין</span>';}
+
+function go(id,el){
+  document.querySelectorAll('.pg').forEach(p=>{p.classList.remove('on');p.style.display='';});
+  document.querySelectorAll('.nt').forEach(n=>n.classList.remove('on'));
+  const pg=document.getElementById('pg-'+id);
+  if(pg){pg.classList.add('on');if(id==='ai')pg.style.display='flex';}
+  if(el)el.classList.add('on');
+  else{const f=[...document.querySelectorAll('.nt')].find(n=>n.getAttribute('onclick')?.includes("'"+id+"'"));if(f)f.classList.add('on');}
+  if(id==='stock')renderStock();
+  if(id==='wholesale')renderWholesale();
+  if(id==='finance')renderFinance();
+  if(id==='dash'){renderUrgent();renderSales();renderPayments();renderTasks();renderSparkline();}
+}
+
+let sMode='all';
+function sf(el,m){sMode=m;document.querySelectorAll('.fps .fp').forEach(f=>f.classList.remove('on'));el.classList.add('on');renderStock();}
+function renderStock(){
+  const q=(document.getElementById('sInp')?.value||'').toLowerCase();
+  let list=STOCK.filter(s=>{
+    if(sMode==='excl'&&!s.excl)return false;
+    if(sMode==='urgent'&&!(isUrgent(s)||(s.store+s.wh)===0))return false;
+    if(sMode==='store'&&s.store<=0)return false;
+    if(sMode==='wh'&&s.wh<=0)return false;
+    if(q&&!s.name.toLowerCase().includes(q)&&!s.brand.toLowerCase().includes(q))return false;
+    return true;
+  }).sort((a,b)=>(a.store+a.wh)-(b.store+b.wh));
+  document.getElementById('stockBody').innerHTML=list.map(s=>`
+    <tr class="${s.excl?'re':''}">
+      <td>${s.excl?'<span style="color:var(--red);font-weight:700">★ </span>':''}<strong>${s.name}</strong></td>
+      <td>${s.excl?`<span class="bx bx-excl" style="font-size:9px">${s.brand}</span>`:`<span class="bx bx-gray" style="font-size:9px">${s.brand}</span>`}</td>
+      <td style="color:var(--text2);font-size:10px">${s.cat}</td>
+      <td><div class="sc"><button class="scb" onclick="adj(${s.id},'s',-1)">−</button><div><div class="scv" style="color:${s.store===0?'var(--red)':isUrgent(s)?'var(--low)':'var(--text)'}">${s.store}</div><div style="font-size:9px;color:var(--text2);text-align:center">חנות</div></div><button class="scb" onclick="adj(${s.id},'s',1)">+</button></div></td>
+      <td><div class="sc"><button class="scb" onclick="adj(${s.id},'w',-1)">−</button><div><div class="scv">${s.wh}</div><div style="font-size:9px;color:var(--text2);text-align:center">מחסן</div></div><button class="scb" onclick="adj(${s.id},'w',1)">+</button></div></td>
+      <td>${fmt(s.retail)}</td>
+      <td style="color:${s.excl?'var(--red)':'var(--ok)'};font-weight:600">${fmt(wsPrice(s.retail,s.excl))}</td>
+      <td>${statBadge(s)}</td>
+      <td><div class="ra"><button class="rab" onclick="openQA('sell')" title="מכר"><i class="ti ti-minus"></i></button><button class="rab" onclick="openQA('receive')" title="קלוט"><i class="ti ti-plus"></i></button></div></td>
+    </tr>`).join('');
+}
+function adj(id,loc,d){
+  const s=STOCK.find(x=>x.id===id);if(!s)return;
+  if(loc==='s')s.store=Math.max(0,s.store+d);else s.wh=Math.max(0,s.wh+d);
+  renderStock();
+  const urgent=STOCK.filter(x=>x.excl&&isUrgent(x)).length;
+  document.getElementById('nb-stock').textContent=urgent;
+  toast(`${d>0?'+':d} ${s.name.split(' ').slice(0,3).join(' ')}`,d>0?'var(--ok)':'var(--low)');
+}
+
+let wMode='all'; const wsCart={};
+function wf(el,m){wMode=m;document.querySelectorAll('#pg-wholesale .fp').forEach(f=>f.classList.remove('on'));el.classList.add('on');renderWholesale();}
+function renderWholesale(){
+  let list=STOCK.filter(s=>(wMode==='lux'?s.excl:wMode==='std'?!s.excl:true));
+  document.getElementById('wsBody').innerHTML=list.map(s=>{
+    const ws=wsPrice(s.retail,s.excl),vip=wsPrice(s.retail,s.excl,0.10),tot=s.store+s.wh;
+    return `<tr class="${s.excl?'re':''}"><td>${s.excl?'<span style="color:var(--red);font-weight:700">★ </span>':''}<strong>${s.name}</strong></td>
+      <td>${s.excl?`<span class="bx bx-excl" style="font-size:9px">${s.brand}</span>`:`<span class="bx bx-gray" style="font-size:9px">${s.brand}</span>`}</td>
+      <td><span style="font-size:10px;background:#f4f5f7;padding:1px 6px;border-radius:4px">${s.excl?'÷ 1.6':'÷ 2'}</span></td>
+      <td style="color:var(--text2);text-decoration:line-through;font-size:10px">${fmt(s.retail)}</td>
+      <td style="font-weight:700;color:${s.excl?'var(--red)':'var(--ok)'}">${fmt(ws)}</td>
+      <td style="color:var(--ok)">${fmt(vip)}</td>
+      <td>${tot===0?'<span class="bx bx-out">אזל</span>':isUrgent(s)?'<span class="bx bx-low">נמוך</span>':'<span class="bx bx-ok">'+tot+'</span>'}</td>
+      <td><div class="sc"><button class="scb" onclick="wsAdj(${s.id},-1)" ${tot===0?'disabled style="opacity:.35"':''}>−</button><div class="scv" id="wsc-${s.id}">${wsCart[s.id]||0}</div><button class="scb" onclick="wsAdj(${s.id},1)" ${tot===0?'disabled style="opacity:.35"':''}>+</button></div></td>
+    </tr>`;}).join('');
+}
+function wsAdj(id,d){wsCart[id]=Math.max(0,(wsCart[id]||0)+d);const el=document.getElementById('wsc-'+id);if(el)el.textContent=wsCart[id];}
+
+function renderUrgent(){
+  const u=STOCK.filter(s=>s.excl&&(isUrgent(s)||(s.store+s.wh)===0)).sort((a,b)=>(a.store+a.wh)-(b.store+b.wh));
+  document.getElementById('urgent-tbl').innerHTML=u.map(s=>`<tr class="re"><td><span style="color:var(--red);font-weight:700">★ </span><strong>${s.name}</strong></td><td style="text-align:center;font-weight:700;color:${s.store===0?'var(--red)':'var(--low)'}">${s.store}</td><td style="text-align:center;font-weight:700">${s.wh}</td><td>${statBadge(s)}</td></tr>`).join('');
+}
+const MONTHS=[{m:'ינואר',v:58000},{m:'פברואר',v:62000},{m:'מרץ',v:71000},{m:'אפריל',v:75200},{m:'מאי',v:84200},{m:'יוני*',v:88000}];
+function renderSales(){
+  const max=Math.max(...MONTHS.map(d=>d.v));
+  document.getElementById('sales-chart').innerHTML=MONTHS.map(d=>`<div class="bar-row"><div class="bar-lbl">${d.m}</div><div class="bar-trk"><div class="bar-fill" style="width:${(d.v/max*100).toFixed(1)}%;background:${d.m==='מאי'?'var(--red)':d.m.includes('*')?'#85B7EB':'var(--ok)'}"><span class="bar-val">${(d.v/1000).toFixed(0)}K</span></div></div></div>`).join('');
+}
+const TASKS=[{done:false,txt:'שלח תזכורת לדייגי הצפון — INV-005',urgent:true},{done:false,txt:'PO ל-mc works — 3 פריטים אזלו',urgent:true},{done:true,txt:'קליטת andy — ₪15,540'},{done:false,txt:'פיוס בנקאי — הפרש ₪2,000'}];
+function renderTasks(){
+  document.getElementById('task-list').innerHTML=TASKS.map((t,i)=>`<div style="display:flex;align-items:center;gap:7px;padding:4px 0;cursor:pointer;border-bottom:var(--border)" onclick="toggleTask(${i})"><div style="width:15px;height:15px;border-radius:4px;border:1.5px solid ${t.done?'var(--ok)':t.urgent?'var(--red)':'#ccc'};background:${t.done?'var(--ok-bg)':'transparent'};display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;color:var(--ok)">${t.done?'✓':''}</div><div style="flex:1;font-size:11px;color:${t.done?'var(--text2)':'var(--text)'};text-decoration:${t.done?'line-through':'none'};line-height:1.3">${t.txt}</div>${t.urgent&&!t.done?'<div style="width:5px;height:5px;border-radius:50%;background:var(--red)"></div>':''}</div>`).join('');
+}
+function toggleTask(i){TASKS[i].done=!TASKS[i].done;renderTasks();}
+const PAYMENTS=[{lbl:"צ'ק לאלקטרו ים",date:'30.05.26',amt:-4200,urgent:true},{lbl:'mc works ¥620K',date:'01.06.26',amt:-15314},{lbl:'מע"מ רבעוני',date:'15.06.26',amt:-7400,warn:true},{lbl:'גבייה — ציוד ים חיפה',date:'צפוי',amt:9676,income:true}];
+function renderPayments(){
+  document.getElementById('payments-list').innerHTML=PAYMENTS.map(p=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:var(--border)"><div><div style="font-size:11px;font-weight:500">${p.lbl}</div><div style="font-size:10px;color:var(--text2)">${p.date}</div></div><span style="font-weight:700;font-size:12px;color:${p.income?'var(--ok)':p.urgent?'var(--red)':p.warn?'var(--low)':'var(--text)'}">${p.income?'+':''}${fmt(Math.abs(p.amt))}</span></div>`).join('');
+}
+function renderSparkline(){
+  const v=[58,62,71,75,84],mx=Math.max(...v);
+  const el=document.getElementById('sp-rev');if(!el)return;
+  el.innerHTML=v.map((n,i)=>`<div class="spb" style="height:${(n/mx*100).toFixed(0)}%;background:${i===4?'var(--red)':'var(--ok)'}"></div>`).join('');
+}
+function renderFinance(){
+  const P={rev:84200,cogs:32100,ship:2400,cust:1800,sal:4200,off:1400,mis:900,tax:2800};
+  const gross=P.rev-P.cogs,opex=P.ship+P.cust+P.sal+P.off+P.mis,net=gross-opex-P.tax;
+  const row=(l,v,bold,col)=>`<div style="display:flex;justify-content:space-between;padding:${bold?'6px 8px':'5px 0'};border-bottom:var(--border);font-size:12px;font-weight:${bold?700:400};background:${bold?'var(--ok-bg)':'transparent'};border-radius:${bold?'5px':0};margin:${bold?'3px 0':0}"><span>${l}</span><span style="color:${col||'var(--text)'}">${fmt(v)}</span></div>`;
+  document.getElementById('pnl-table').innerHTML=row('הכנסות',P.rev,false,'var(--ok)')+row('עלות סחורה',P.cogs,false,'var(--red)')+row('רווח גולמי (61.9%)',gross,true,'var(--ok)')+row('שילוח+מכס',P.ship+P.cust,false)+row('משכורות',P.sal,false)+row('משרד+שונות',P.off+P.mis,false)+row('מס/מע"מ',P.tax,false)+row('רווח נקי (45.9%)',net,true,'var(--ok)');
+  const CF=[{l:'גבייה צפויה',v:28300,ok:true},{l:'mc works ¥620K',v:-15314},{l:'מע"מ',v:-7400,warn:true},{l:'הוצאות',v:-3940},{l:'תזרים נטו',v:1546,bold:true,ok:true}];
+  document.getElementById('cf-list').innerHTML=CF.map(c=>`<div style="display:flex;justify-content:space-between;padding:6px 8px;border-radius:7px;background:${c.bold?'var(--ok-bg)':c.warn?'var(--low-bg)':'#f4f5f7'};font-size:11px;font-weight:${c.bold?700:400};margin-bottom:3px"><span>${c.l}</span><span style="font-weight:600;color:${c.ok?'var(--ok)':c.warn?'var(--low)':'var(--out)'}">${c.v>0?'+':''}${fmt(Math.abs(c.v))}</span></div>`).join('');
+}
+
+// CMD
+const CMD=[
+  {ic:'ti-dashboard',lbl:'לוח בקרה',sub:'ראשי',act:()=>go('dash',null)},
+  {ic:'ti-package',lbl:'מלאי פריטים',sub:'ניהול מלאי',act:()=>go('stock',null)},
+  {ic:'ti-file-invoice',lbl:'חשבוניות מכר',sub:'הפקה וניהול',act:()=>go('invoices',null)},
+  {ic:'ti-minus',lbl:'מכירה מהירה',sub:'הפחת מהמלאי',act:()=>openQA('sell')},
+  {ic:'ti-plus',lbl:'קליטה מהירה',sub:'הוסף למלאי',act:()=>openQA('receive')},
+  {ic:'ti-file-invoice',lbl:'חשבונית חדשה',sub:'הפק מסמך',act:()=>openQA('invoice')},
+  {ic:'ti-clipboard-list',lbl:'הזמנת רכש PO',sub:'הזמן מספק',act:()=>openQA('po')},
+  {ic:'ti-users',lbl:'לקוחות וחנויות',sub:'ניהול',act:()=>go('customers',null)},
+  {ic:'ti-building-store',lbl:'פורטל סיטונאים',sub:'מחירון חנויות',act:()=>go('wholesale',null)},
+  {ic:'ti-chart-bar',lbl:'כספים ו-P&L',sub:'רווח והפסד',act:()=>go('finance',null)},
+  {ic:'ti-robot',lbl:'עוזר AI',sub:'שאל שאלה עסקית',act:()=>go('ai',null)},
+  ...STOCK.map(s=>({ic:'ti-package',lbl:s.name,sub:`${s.brand} · חנות:${s.store} מחסן:${s.wh} · ${fmt(s.retail)}`,act:()=>go('stock',null),isItem:true,excl:s.excl}))
+];
+function openCmd(){document.getElementById('cmdOv').classList.add('open');setTimeout(()=>document.getElementById('cmdInp')?.focus(),50);renderCmd('');}
+function closeCmd(e){if(!e||e.target===document.getElementById('cmdOv'))document.getElementById('cmdOv').classList.remove('open');}
+function renderCmd(q){
+  const res=q?CMD.filter(c=>c.lbl.toLowerCase().includes(q.toLowerCase())||c.sub.toLowerCase().includes(q.toLowerCase())):CMD.slice(0,10);
+  const acts=res.filter(r=>!r.isItem),items=res.filter(r=>r.isItem);
+  let h='';
+  if(acts.length)h+=`<div class="cp-sec"><div class="cp-slbl">פעולות</div>${acts.map((r,i)=>`<div class="cp-item${i===0&&!q?' hl':''}" onclick="execCmd(${CMD.indexOf(r)})"><i class="ti ${r.ic}"></i><div><div>${r.lbl}</div><div class="cp-sub">${r.sub}</div></div></div>`).join('')}</div>`;
+  if(items.length&&q)h+=`<div class="cp-sec"><div class="cp-slbl">מוצרים</div>${items.slice(0,5).map(r=>`<div class="cp-item" onclick="execCmd(${CMD.indexOf(r)})"><i class="ti ti-package" style="color:${r.excl?'var(--red)':'var(--text2)'}"></i><div><div>${r.excl?'★ ':''}<strong>${r.lbl}</strong></div><div class="cp-sub">${r.sub}</div></div></div>`).join('')}</div>`;
+  document.getElementById('cmdRes').innerHTML=h||'<div style="padding:18px;text-align:center;color:var(--text2);font-size:12px">אין תוצאות</div>';
+}
+function execCmd(i){CMD[i]?.act?.();closeCmd();}
+function cmdSearch(v){renderCmd(v);}
+function cmdKey(e){if(e.key==='Escape')closeCmd();if(e.key==='Enter')document.querySelector('.cp-item.hl')?.click();}
+
+// QA
+const QA={
+  sell:{title:'מכירה מהירה',color:'var(--red)',body:`<div class="fgrid" style="padding:13px"><div class="fg"><label>מוצר</label><select id="qa_s">${STOCK.filter(s=>s.store>0).map(s=>`<option value="${s.id}">${s.excl?'★ ':''}${s.name} (חנות: ${s.store})</option>`).join('')}</select></div><div class="fr2"><div class="fg"><label>כמות</label><input type="number" id="qa_q" value="1" min="1"/></div><div class="fg"><label>מיקום</label><select id="qa_l"><option>חנות</option><option>מחסן</option></select></div></div></div><div style="padding:0 13px 13px;display:flex;gap:6px"><button class="btn btn-r" style="flex:1;justify-content:center" onclick="doSell()"><i class="ti ti-check"></i> בצע</button><button class="btn" onclick="closeQA()">ביטול</button></div>`},
+  receive:{title:'קליטה מהירה',color:'var(--ok)',body:`<div class="fgrid" style="padding:13px"><div class="fg"><label>מוצר</label><select id="qa_r">${STOCK.map(s=>`<option value="${s.id}">${s.excl?'★ ':''}${s.name}</option>`).join('')}</select></div><div class="fr2"><div class="fg"><label>כמות</label><input type="number" id="qa_rq" value="1" min="1"/></div><div class="fg"><label>מיקום</label><select id="qa_rl"><option>מחסן</option><option>חנות</option></select></div></div></div><div style="padding:0 13px 13px;display:flex;gap:6px"><button class="btn btn-ok" style="flex:1;justify-content:center" onclick="doReceive()"><i class="ti ti-check"></i> קלוט</button><button class="btn" onclick="closeQA()">ביטול</button></div>`},
+  transfer:{title:'העברת מלאי',color:'var(--info)',body:`<div class="fgrid" style="padding:13px"><div class="fg"><label>מוצר</label><select>${STOCK.map(s=>`<option>${s.excl?'★ ':''}${s.name}</option>`).join('')}</select></div><div class="fr3"><div class="fg"><label>מ</label><select><option>מחסן</option><option>חנות</option></select></div><div class="fg"><label>כמות</label><input type="number" value="5" min="1"/></div><div class="fg"><label>אל</label><select><option>חנות</option><option>מחסן</option></select></div></div></div><div style="padding:0 13px 13px;display:flex;gap:6px"><button class="btn btn-n" style="flex:1;justify-content:center" onclick="closeQA();toast('✅ הועבר','var(--ok)')"><i class="ti ti-check"></i> בצע</button><button class="btn" onclick="closeQA()">ביטול</button></div>`},
+  invoice:{title:'חשבונית חדשה',color:'var(--navy)',body:`<div class="fgrid" style="padding:13px"><div class="fr2"><div class="fg"><label>לקוח</label><select><option>חנות הדייג ת"א ★ VIP</option><option>ציוד ים חיפה</option><option>דייגי הצפון</option></select></div><div class="fg"><label>אמצעי תשלום</label><select><option>העברה</option><option>צ'ק</option><option>אשראי</option></select></div></div><div class="fg"><label>סכום לפני מע"מ</label><input type="number" id="inv_sub" value="5609" oninput="calcInv()"/></div><div class="fg"><label>סה"כ + מע"מ 18%</label><input id="inv_tot" readonly value="₪6,619"/></div></div><div style="padding:0 13px 13px;display:flex;gap:6px"><button class="btn btn-r" style="flex:1;justify-content:center" onclick="closeQA();toast('📄 INV-2026-008 הופקה ✅','var(--ok)')"><i class="ti ti-file-invoice"></i> הפק</button><button class="btn" onclick="closeQA()">ביטול</button></div>`},
+  po:{title:'הזמנת רכש',color:'var(--navy)',body:`<div class="fgrid" style="padding:13px"><div class="fr2"><div class="fg"><label>ספק</label><select><option>mc works Co. 🇯🇵 ★</option><option>TANA Co. 🇯🇵 ★</option><option>andy Co. 🇨🇳</option><option>fox 🇬🇧 ★</option></select></div><div class="fg"><label>מטבע</label><select><option>JPY (₪0.0247)</option><option>USD (₪3.70)</option><option>GBP (₪4.72)</option></select></div></div><div class="fg"><label>פריטים</label><textarea placeholder="MC WORKS EXP 817 ×3 @ ¥50,150" style="height:60px"></textarea></div></div><div style="padding:0 13px 13px;display:flex;gap:6px"><button class="btn btn-n" style="flex:1;justify-content:center" onclick="closeQA();toast('📋 PO-2026-020 נשלח ✅','var(--ok)')"><i class="ti ti-send"></i> שלח PO</button><button class="btn" onclick="closeQA()">ביטול</button></div>`},
+  newcust:{title:'לקוח חדש',color:'var(--info)',body:`<div class="fgrid" style="padding:13px"><div class="fr2"><div class="fg"><label>שם חנות</label><input placeholder="שם העסק"/></div><div class="fg"><label>טלפון</label><input placeholder="05X-XXXXXXX"/></div></div><div class="fr2"><div class="fg"><label>רמה</label><select><option>סטנדרט</option><option>פרמיום (−5%)</option><option>זהב VIP (−10%)</option></select></div><div class="fg"><label>תנאי תשלום</label><select><option>שוטף+30</option><option>שוטף+60</option><option>מזומן</option></select></div></div></div><div style="padding:0 13px 13px;display:flex;gap:6px"><button class="btn btn-r" style="flex:1;justify-content:center" onclick="closeQA();toast('✅ לקוח נוסף','var(--ok)')"><i class="ti ti-check"></i> שמור</button><button class="btn" onclick="closeQA()">ביטול</button></div>`}
+};
+function openQA(t){
+  const qa=QA[t];if(!qa)return;
+  const icons={sell:'minus',receive:'plus',transfer:'arrows-exchange',invoice:'file-invoice',po:'clipboard-list',newcust:'user-plus'};
+  document.getElementById('qaModal').innerHTML=`<div class="qam-hdr" style="background:${qa.color}18"><i class="ti ti-${icons[t]}" style="color:${qa.color}"></i><span class="qam-title">${qa.title}</span><span class="cp-esc" onclick="closeQA()">ESC</span></div>${qa.body}`;
+  document.getElementById('qaOv').classList.add('open');
+}
+function closeQA(e){if(!e||e.target===document.getElementById('qaOv'))document.getElementById('qaOv').classList.remove('open');}
+function doSell(){
+  const id=parseInt(document.getElementById('qa_s')?.value),qty=parseInt(document.getElementById('qa_q')?.value)||1,loc=document.getElementById('qa_l')?.value;
+  const s=STOCK.find(x=>x.id===id);
+  if(s){if(loc==='חנות')s.store=Math.max(0,s.store-qty);else s.wh=Math.max(0,s.wh-qty);}
+  closeQA();toast(`✅ נמכרו ${qty} × ${s?.name?.split(' ').slice(0,3).join(' ')||''}`,'var(--ok)');
+}
+function doReceive(){
+  const id=parseInt(document.getElementById('qa_r')?.value),qty=parseInt(document.getElementById('qa_rq')?.value)||1,loc=document.getElementById('qa_rl')?.value;
+  const s=STOCK.find(x=>x.id===id);
+  if(s){if(loc==='מחסן')s.wh+=qty;else s.store+=qty;}
+  closeQA();toast(`✅ נקלטו ${qty} × ${s?.name?.split(' ').slice(0,3).join(' ')||''}`,'var(--ok)');
+}
+function calcInv(){
+  const sub=parseFloat(document.getElementById('inv_sub')?.value)||0;
+  const el=document.getElementById('inv_tot');if(el)el.value=fmt(Math.round(sub*1.18));
+}
+
+async function doAsk(){
+  const inp=document.getElementById('aiInp');const q=inp.value.trim();if(!q)return;
+  const msgs=document.getElementById('aiMsgs');
+  msgs.innerHTML+=`<div class="am am-u">${q}</div>`;inp.value='';
+  const lid='l'+Date.now();
+  msgs.innerHTML+=`<div class="am am-ai" id="${lid}"><span class="ai-dot"></span><span class="ai-dot"></span><span class="ai-dot"></span></div>`;
+  msgs.scrollTop=msgs.scrollHeight;
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,system:`אתה עוזר חכם של Fisherman Club. נתוני מלאי: ${JSON.stringify(STOCK.map(s=>({name:s.name,brand:s.brand,excl:s.excl,store:s.store,wh:s.wh,retail:s.retail})))}. שע"ח: USD=₪${RATES.usd}, JPY=₪${RATES.jpy}. מחיר חנות: יוקרה÷1.6, סטנדרט÷2. ענה בעברית תמציתי.`,messages:[{role:'user',content:q}]})});
+    const d=await r.json();
+    const ans=d.content?.[0]?.text||'לא הצלחתי לעבד';
+    const el=document.getElementById(lid);
+    if(el)el.innerHTML=ans.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  }catch(e){const el=document.getElementById(lid);if(el)el.innerHTML='⚠️ שגיאת חיבור';}
+  msgs.scrollTop=msgs.scrollHeight;
+}
+function askAI(q){document.getElementById('aiInp').value=q;doAsk();}
+
+async function fetchRates(){
+  try{
+    const r=await fetch('https://api.exchangerate-api.com/v4/latest/ILS');
+    const d=await r.json();
+    if(d.rates){
+      RATES.usd=+(1/d.rates.USD).toFixed(2);RATES.jpy=+(1/d.rates.JPY).toFixed(4);RATES.gbp=+(1/d.rates.GBP).toFixed(2);
+      document.getElementById('rb-usd').textContent=`USD ₪${RATES.usd}`;
+      document.getElementById('rb-jpy').textContent=`JPY ₪${RATES.jpy}`;
+      document.getElementById('rb-gbp').textContent=`GBP ₪${RATES.gbp}`;
+      const kpi=document.getElementById('jpy-kpi');if(kpi)kpi.textContent='₪'+RATES.jpy;
+      const ts=new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'});
+      const tsel=document.getElementById('jpy-ts');if(tsel)tsel.textContent='עודכן '+ts;
+      document.getElementById('rates-ts').textContent='עודכן '+ts;
+    }
+  }catch(e){document.getElementById('rates-ts').textContent='שערים ידניים';}
+}
+function showRates(){toast(`💱 USD ₪${RATES.usd} · JPY ₪${RATES.jpy} · GBP ₪${RATES.gbp}`,'var(--info)');}
+
+function toast(msg,bg='var(--navy)'){
+  const c=document.getElementById('toastCon');const t=document.createElement('div');
+  t.className='toast';t.style.background=bg==='var(--ok)'?'#0a3a08':bg==='var(--info)'?'#0a2a50':bg==='var(--low)'?'#3a2000':'var(--navy)';
+  t.innerHTML=msg;c.appendChild(t);setTimeout(()=>t.remove(),2600);
+}
+
+document.getElementById('dashDate').textContent=new Date().toLocaleDateString('he-IL',{weekday:'long',year:'numeric',month:'long',day:'numeric'})+' · 6 התראות פעילות';
+document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();openCmd();}if(e.key==='Escape'){closeCmd();closeQA();}});
+fetchRates();setInterval(fetchRates,300000);
+go('dash',document.querySelector('.nt.on'));
+</script>
+</body>
+</html>
